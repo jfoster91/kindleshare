@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import android.R.attr.password
 import android.support.v4.app.FragmentActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import android.R.attr.password
+import android.content.Intent
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,22 +36,39 @@ class MainActivity : AppCompatActivity() {
 
     fun clickedLoginOrRegister(view: View){
 
-        mAuth.createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Log.i("Jonnybag", "Success")
-                        login()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-                    }
-                }
+        var tag = goBtn.getTag()
 
+        if (tag == "Register") {
+
+            mAuth.createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            login()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+        } else if (tag == "SignIn") {
+            mAuth.signInWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            login()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+        }
     }
 
     fun login(){
         Log.i("Login", "Success")
+        val loginIntent = Intent(this, IndexActivity::class.java)
+        startActivity(loginIntent)
     }
 }
 
