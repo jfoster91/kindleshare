@@ -1,14 +1,17 @@
 package com.example.jfoster91.kindleshare
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_index.*
 
 class IndexActivity : AppCompatActivity() {
 
     val mAuth = FirebaseAuth.getInstance()
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -33,8 +36,16 @@ class IndexActivity : AppCompatActivity() {
         setContentView(R.layout.activity_index)
 
         val currentUser = mAuth.currentUser
-        message.text = currentUser.toString()
+        if (currentUser != null) {
+            message.text = currentUser.email.toString()
+        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    fun logout(view: View){
+        mAuth.signOut()
+        val logoutIntent = Intent(this, MainActivity::class.java)
+        startActivity(logoutIntent)
     }
 }
